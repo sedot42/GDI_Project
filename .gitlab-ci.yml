@@ -1,0 +1,19 @@
+# The Docker image that will be used to build your app
+image: ruby:latest
+variables:
+  JEKYLL_ENV: production
+create-pages:
+  pages:
+    # The folder that contains the files to be exposed at the Page URL
+    publish: public
+  rules:
+    # This ensures that only pushes to the default branch will trigger
+    # a pages deploy
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+  script:
+    - cd docs
+    - bundle install
+    - bundle exec jekyll build -d ../public  --baseurl "$CI_PAGES_URL_PATH"
+  artifacts:
+    paths:
+      - public
